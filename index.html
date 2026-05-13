@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Brothers84</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="//libtl.com/sdk.js" data-zone="10997672" data-sdk='show_10997672'></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+    <div id="title-screen" class="screen active">
+        <h1 class="title-main">Brothers84</h1>
+        <button id="btn-load" class="btn btn-blue">Load Game</button>
+        <button id="btn-new" class="btn btn-green">New Game</button>
+    </div>
+
+    <div id="creation-screen" class="screen">
+        <h2>Création du Héros</h2>
+        <div class="creation-layout">
+            <div class="creation-left">
+                <input type="text" id="char-name" placeholder="Nom du héros">
+                <select id="char-class">
+                    <option value="Chevalier">Chevalier</option><option value="Barbare">Barbare</option>
+                    <option value="Elfe">Elfe</option><option value="Nain">Nain</option>
+                    <option value="Espionne">Espionne</option><option value="Ninja">Ninja</option><option value="Amazone">Amazone</option>
+                </select>
+                <div id="stats-display"></div>
+                <button id="btn-roll" class="btn btn-yellow">Lancer les dés (Pub)</button>
+                <button id="btn-start-game" class="btn btn-green">Commencer</button>
+            </div>
+            <div class="creation-right"><div id="char-portrait" class="portrait-frame"></div></div>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div id="top-half">
+            <!-- CORRECTION: Dimensions explicites pour éviter le canvas noir -->
+            <canvas id="dungeon-canvas" width="640" height="360"></canvas>
+            <div id="combat-ui" class="hidden">
+                <div id="enemy-container">
+                    <canvas id="enemy-canvas" width="160" height="160"></canvas>
+                    <div class="bar-container"><div id="enemy-hp-bar" class="bar hp"></div><span id="enemy-hp-text"></span></div>
+                    <div id="enemy-atb-container"><div id="enemy-atb-bar" class="bar atb"></div></div>
+                </div>
+                <div id="player-atb-container"><div id="player-atb-bar" class="bar atb"></div></div>
+            </div>
+        </div>
+
+        <div id="bottom-half">
+            <div id="left-panel">
+                <div class="stat-row"><span id="ui-name" class="name-tag"></span> <span id="ui-class"></span></div>
+                <div class="stat-row">Niv: <span id="ui-level"></span> | XP: <span id="ui-xp"></span></div>
+                <div class="bar-container"><div id="ui-hp-bar" class="bar hp"></div><span id="ui-hp-text"></span></div>
+                <div class="bar-container"><div id="ui-mp-bar" class="bar mp"></div><span id="ui-mp-text"></span></div>
+                <div class="stats-grid">
+                    <span>FOR:<span id="ui-str"></span></span><span>AGI:<span id="ui-agi"></span></span><span>VIT:<span id="ui-vit"></span></span>
+                    <span>END:<span id="ui-end"></span></span><span>INT:<span id="ui-int"></span></span><span>MAG:<span id="ui-mag"></span></span><span>CHA:<span id="ui-lck"></span></span>
+                </div>
+                <div id="floor-info">Étage : <span id="ui-floor">1</span>/30</div>
+                <div class="action-btns-vertical">
+                    <button id="btn-attack" class="action-btn btn-red">ATTAQUE</button>
+                    <button id="btn-magic" class="action-btn btn-lightgreen">MAGIE</button>
+                    <button id="btn-inventory" class="action-btn btn-lightblue">INVENTAIRE</button>
+                    <button id="btn-restore" class="action-btn btn-violet">RESTORE (PUB)</button>
+                </div>
+                <div class="bottom-buttons">
+                    <button id="btn-save" class="btn btn-grey small-btn">Save</button>
+                    <button id="btn-load-game" class="btn btn-grey small-btn">Load</button>
+                </div>
+            </div>
+            
+            <div id="center-panel">
+                <div id="dpad-container">
+                    <!-- CORRECTION: Utilisation de texte ASCII au lieu d'emoji spéciaux -->
+                    <button class="dpad-btn up" id="d-up">&#9650;</button>
+                    <button class="dpad-btn left" id="d-left">&#9664;</button>
+                    <div class="dpad-center"></div>
+                    <button class="dpad-btn right" id="d-right">&#9654;</button>
+                    <button class="dpad-btn down" id="d-down">&#9660;</button>
+                </div>
+            </div>
+
+            <div id="right-panel">
+                <canvas id="minimap-canvas" width="200" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="inventory-screen" class="screen">
+        <h2>Inventaire</h2>
+        <div id="inv-layout">
+            <canvas id="inv-char-canvas" width="150" height="200"></canvas>
+            <div id="inv-slots">
+                <div class="slot" data-slot="head">Tête</div><div class="slot" data-slot="torso">Torse</div>
+                <div class="slot" data-slot="legs">Jambes</div><div class="slot" data-slot="feet">Pieds</div>
+                <div class="slot" data-slot="hand1">Main D.</div><div class="slot" data-slot="hand2">Main G.</div>
+            </div>
+        </div>
+        <div id="inv-list"></div>
+        <button id="btn-close-inv" class="btn btn-red">Fermer</button>
+    </div>
+
+    <div id="gameover-screen" class="screen">
+        <h1>GAME OVER</h1>
+        <button id="btn-new-chance" class="btn btn-neon-violet">New Chance (0/10)</button>
+    </div>
+
+    <div id="blood-splatter" class="hidden"></div>
+    <div id="magic-effect" class="hidden"></div>
+    <script src="script.js"></script>
+</body>
+</html>
